@@ -5,6 +5,8 @@ const setupLights = require('./helpers/setup-lights');
 const buildAxes = require('./helpers/build-axes');
 const createIndicatorArrow = require('./helpers/create-indicator-arrow');
 
+const pineTree = require('./models/pine-tree');
+
 require('./css/normalize.css');
 
 // Set height, width, and default camera position
@@ -23,7 +25,7 @@ scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(width, height);
-renderer.setClearColor(0xF7F7F7);
+renderer.setClearColor(0x616161);
 
 // Set up controls and add the renderer to the dom
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -34,11 +36,7 @@ document.body.appendChild(renderer.domElement);
 scene.add(buildAxes(50));
 setupLights(scene);
 
-const lambertMaterial = new THREE.MeshLambertMaterial({ color: 0x88A7D4 })
-
-const geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
-const mesh = new THREE.Mesh(geometry, lambertMaterial);
-scene.add(mesh);
+scene.add(pineTree());
 
 // Start
 animate();
