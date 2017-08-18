@@ -4,6 +4,8 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 const buildAxes = require('./helpers/build-axes');
 const createIndicatorArrow = require('./helpers/create-indicator-arrow');
 
+const pineTree = require('./models/pine-tree');
+console.log(pineTree);
 require('./css/normalize.css');
 
 // Set height, width, and default camera position
@@ -31,23 +33,13 @@ document.body.appendChild(renderer.domElement);
 
 // Add objects to the scene
 scene.add(buildAxes(50));
-// createIndicatorArrow(scene, [50, 50, 75], 0, Math.PI / 3, Math.PI / 3);
-const arrow = createIndicatorArrow(scene, [50, 50, 75], 0, Math.PI / 2, Math.PI / 2, false);
-
-const startTime = +new Date();
+scene.add(pineTree());
 
 // Start
 animate();
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
-  render();
-
-  const time = +new Date();
-  arrow.setAngle((time - startTime)/10000 * Math.PI / 2);
-}
-
-function render() {
   renderer.render(scene, camera);
 }
 
