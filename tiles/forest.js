@@ -24,7 +24,7 @@ function createForestTile() {
 module.exports = createForestTile;
 
 function createGround() {
-  const yFunc = (i) => i > sumN(GROUND_RINGS - 1) * 6 ? 0 : Math.random() * 0.4;
+  const yFunc = (i, j) => i === GROUND_RINGS ? 0 : Math.random() * 0.4;
   const faceFunc = (face) => {
     const rand = Math.random();
     let rgbVals;

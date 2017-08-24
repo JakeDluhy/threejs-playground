@@ -2,18 +2,18 @@ const THREE = require('three');
 
 const { sumN } = require('./math');
 
-function createHexagonGeometry(rings, radius, yFunc = () => 0, faceFunc = () => {}) {
+function createHexagonGeometry(rings, radius, yFunc = (i, j) => 0, faceFunc = (face) => {}) {
   const ringRad = radius / rings;
   const verts = [];
   const faces = [];
 
-  verts.push(new THREE.Vector3(0, yFunc(0), 0));
+  verts.push(new THREE.Vector3(0, yFunc(0, 0), 0));
   for(let i = 1; i <= 6; i++) {
     const angle = (i - 1) * (Math.PI / 3);
 
     verts.push(new THREE.Vector3(
       ringRad * Math.sin(angle),
-      yFunc(i),
+      yFunc(1, i),
       ringRad * Math.cos(angle)
     ));
 
@@ -54,7 +54,7 @@ function createHexagonGeometry(rings, radius, yFunc = () => 0, faceFunc = () => 
         x = (ringRad * i) * (((Math.sin(nextAngle) - Math.sin(prevAngle)) * sideIdx / i) + Math.sin(prevAngle));
       }
 
-      verts.push(new THREE.Vector3(x, yFunc(numPrevTotalPoints + j), z));
+      verts.push(new THREE.Vector3(x, yFunc(i, numPrevTotalPoints + j), z));
 
       let thirdVert = ((sumN(i - 2) * 6) + j - cornerCount);
       thirdVert = (thirdVert > numPrevTotalPoints) ? (sumN(i - 2) * 6) + 1 : thirdVert;
