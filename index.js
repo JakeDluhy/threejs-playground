@@ -1,11 +1,12 @@
 const THREE = require('three');
 const OrbitControls = require('three-orbit-controls')(THREE);
+THREE.Cache.enabled = true;
 
 const setupLights = require('./helpers/setup-lights');
 const buildAxes = require('./helpers/build-axes');
-const createIndicatorArrow = require('./helpers/create-indicator-arrow');
 
-const pineTree = require('./models/pine-tree');
+const { TILE_RADIUS } = require('./tiles/generic');
+const forestTile = require('./tiles/forest');
 
 require('./css/normalize.css');
 
@@ -20,7 +21,8 @@ const FAR  = 10000;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-camera.position.z = 300;
+camera.position.x = -50;
+camera.position.y = 50;
 scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -36,7 +38,9 @@ document.body.appendChild(renderer.domElement);
 scene.add(buildAxes(50));
 setupLights(scene);
 
-scene.add(pineTree());
+const f1 = forestTile();
+
+scene.add(f1);
 
 // Start
 animate();
