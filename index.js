@@ -7,6 +7,7 @@ const buildAxes = require('./helpers/build-axes');
 
 const { TILE_RADIUS } = require('./tiles/generic');
 const forestTile = require('./tiles/forest');
+const mountainTile = require('./tiles/mountain');
 
 require('./css/normalize.css');
 
@@ -40,7 +41,37 @@ setupLights(scene);
 
 const f1 = forestTile();
 
-scene.add(f1);
+const f2 = forestTile();
+f2.position.x = TILE_RADIUS * Math.sqrt(3);
+
+const f3 = forestTile();
+f3.position.x = -TILE_RADIUS * Math.sqrt(3);
+
+const f4 = forestTile();
+f4.position.x = TILE_RADIUS * Math.sqrt(3)/2;
+f4.position.z = 1.5 * TILE_RADIUS;
+
+const f5 = forestTile();
+f5.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
+f5.position.z = 1.5 * TILE_RADIUS;
+
+const f6 = forestTile();
+f6.position.x = TILE_RADIUS * Math.sqrt(3)/2;
+f6.position.z = -1.5 * TILE_RADIUS;
+
+const f7 = forestTile();
+f7.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
+f7.position.z = -1.5 * TILE_RADIUS;
+
+const m1 = mountainTile();
+
+scene.add(m1);
+// scene.add(f2);
+// scene.add(f3);
+// scene.add(f4);
+// scene.add(f5);
+// scene.add(f6);
+// scene.add(f7);
 
 // Start
 animate();
