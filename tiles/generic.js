@@ -31,5 +31,6 @@ function randomPair(offset = 0) {
 }
 
 exports.TILE_RADIUS = TILE_RADIUS;
+exports.GROUND_RADIUS = TILE_RADIUS * 0.98;
 exports.createGenericTile = createGenericTile;
 exports.randomPair = randomPair;

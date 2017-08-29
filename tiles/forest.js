@@ -1,6 +1,6 @@
 const THREE = require('three');
 
-const { createGenericTile, randomPair, TILE_RADIUS } = require('./generic');
+const { createGenericTile, randomPair, GROUND_RADIUS } = require('./generic');
 const { randomBetween, sumN } = require('../utils/math');
 const { createHexagonGeometry } = require('../utils/three');
 
@@ -46,7 +46,7 @@ function createGround() {
     face.color.setRGB(...rgbVals);
   };
 
-  const groundGeo = createHexagonGeometry(GROUND_RINGS, TILE_RADIUS * 0.98, yFunc, faceFunc);
+  const groundGeo = createHexagonGeometry(GROUND_RINGS, GROUND_RADIUS, yFunc, faceFunc);
   const groundMat = new THREE.MeshLambertMaterial({ shading: THREE.FlatShading, vertexColors: THREE.FaceColors });
   const ground = new THREE.Mesh(groundGeo, groundMat);
 
