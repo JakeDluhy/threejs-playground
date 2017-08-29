@@ -8,31 +8,9 @@ function createHexagonGeometry(rings, radius, yFunc = (i, j) => 0, faceFunc = (f
   const faces = [];
 
   verts.push(new THREE.Vector3(0, yFunc(0, 0), 0));
-  for(let i = 1; i <= 6; i++) {
-    const angle = (i - 1) * (Math.PI / 3);
 
-    verts.push(new THREE.Vector3(
-      ringRad * Math.sin(angle),
-      yFunc(1, i),
-      ringRad * Math.cos(angle)
-    ));
-
-    pushFace(
-      i,
-      (i % 6) + 1,
-      0
-    );
-
-    if(rings !== 1) {
-      pushFace(
-        i,
-        6 + (2 * i),
-        (i % 6) + 1
-      );
-    }
-  }
-
-  for(let i = 2; i <= rings; i++) {
+  // Push vertices
+  for(let i = 1; i <= rings; i++) {
     const numTotalPoints = sumN(i) * 6;
     const numPrevTotalPoints = sumN(i - 1) * 6;
     const numRingPoints = numTotalPoints - numPrevTotalPoints;
@@ -56,8 +34,25 @@ function createHexagonGeometry(rings, radius, yFunc = (i, j) => 0, faceFunc = (f
 
       verts.push(new THREE.Vector3(x, yFunc(i, numPrevTotalPoints + j), z));
 
-      let thirdVert = ((sumN(i - 2) * 6) + j - cornerCount);
-      thirdVert = (thirdVert > numPrevTotalPoints) ? (sumN(i - 2) * 6) + 1 : thirdVert;
+      if(j % i === 0) cornerCount++;
+    }
+  }
+
+  // Push faces
+  for(let i = 1; i <= rings; i++) {
+    const numTotalPoints = sumN(i) * 6;
+    const numPrevTotalPoints = sumN(i - 1) * 6;
+    const numRingPoints = numTotalPoints - numPrevTotalPoints;
+    let cornerCount = 0;
+
+    for(let j = 1; j <= numRingPoints; j++) {
+      let thirdVert;
+      if(i === 1) {
+        thirdVert = 0;
+      } else {
+        thirdVert = ((sumN(i - 2) * 6) + j - cornerCount);
+        thirdVert = (thirdVert > numPrevTotalPoints) ? (sumN(i - 2) * 6) + 1 : thirdVert;
+      }
 
       pushFace(
         numPrevTotalPoints + j,
@@ -86,7 +81,7 @@ function createHexagonGeometry(rings, radius, yFunc = (i, j) => 0, faceFunc = (f
 
   function pushFace(a, b, c) {
     const face = new THREE.Face3(a, b, c);
-    faceFunc(face);
+    faceFunc(face, [verts[a], verts[b], verts[c]]);
     faces.push(face);
   }
 }
