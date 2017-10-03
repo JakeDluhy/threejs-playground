@@ -1,5 +1,5 @@
 const THREE = require('three');
-const OrbitControls = require('three-orbit-controls')(THREE);
+const OrbitControls = require('./helpers/orbit-controls')(THREE);
 THREE.Cache.enabled = true;
 
 const setupLights = require('./helpers/setup-lights');
@@ -31,7 +31,7 @@ renderer.setSize(width, height);
 renderer.setClearColor(0x616161);
 
 // Set up controls and add the renderer to the dom
-const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement, { maxPolarAngle: Math.PI / 2 });
 
 document.body.appendChild(renderer.domElement);
 
