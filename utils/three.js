@@ -7,7 +7,7 @@ function createHexagonGeometry(rings, radius, yFunc = (i, j) => 0, faceFunc = (f
   const verts = [];
   const faces = [];
 
-  verts.push(new THREE.Vector3(0, yFunc(0, 0), 0));
+  verts.push(new THREE.Vector3(0, yFunc({ i: 0, j: 0, z: 0, x: 0 }), 0));
 
   // Push vertices
   for(let i = 1; i <= rings; i++) {
@@ -32,7 +32,7 @@ function createHexagonGeometry(rings, radius, yFunc = (i, j) => 0, faceFunc = (f
         x = (ringRad * i) * (((Math.sin(nextAngle) - Math.sin(prevAngle)) * sideIdx / i) + Math.sin(prevAngle));
       }
 
-      verts.push(new THREE.Vector3(x, yFunc(i, numPrevTotalPoints + j), z));
+      verts.push(new THREE.Vector3(x, yFunc({ i, j: numPrevTotalPoints + j, z, x }), z));
 
       if(j % i === 0) cornerCount++;
     }

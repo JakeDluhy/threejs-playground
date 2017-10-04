@@ -19,7 +19,7 @@ function createMountainTile() {
 module.exports = createMountainTile;
 
 function createGround() {
-  const yFunc = (i) => {
+  const yFunc = ({ i }) => {
     if(i === MOUNTAIN_RINGS) return 0;
     return ((MOUNTAIN_RINGS - i) / MOUNTAIN_RINGS) * BASE_MOUTAIN_HEIGHT + randomBetween(-2, 2);
   };
@@ -39,7 +39,7 @@ function createGround() {
 
   // Make sure it's even
   const midRing = Math.floor(MOUNTAIN_RINGS / 2) + (Math.floor(MOUNTAIN_RINGS / 2) % 2);
-  const platformHeight = yFunc(midRing);
+  const platformHeight = yFunc({ i: midRing });
 
   const centerIdx = (sumN(midRing - 1) * 6) + (4 * midRing) + (midRing / 2) + 1;
   const downIdx1 = (sumN(midRing - 2) * 6) + (4 * (midRing - 1)) + Math.floor((midRing - 1) / 2) + 1;
