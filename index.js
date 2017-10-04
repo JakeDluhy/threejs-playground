@@ -8,6 +8,7 @@ const buildAxes = require('./helpers/build-axes');
 const { TILE_RADIUS } = require('./tiles/generic');
 const forestTile = require('./tiles/forest');
 const mountainTile = require('./tiles/mountain');
+const riverTile = require('./tiles/river');
 
 require('./css/normalize.css');
 
@@ -63,15 +64,41 @@ const f7 = forestTile();
 f7.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
 f7.position.z = -1.5 * TILE_RADIUS;
 
-const m1 = mountainTile();
+const m3 = mountainTile();
+m3.position.x = -TILE_RADIUS * Math.sqrt(3);
 
-scene.add(m1);
+const m7 = mountainTile();
+m7.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
+m7.position.z = -1.5 * TILE_RADIUS;
+
+const r1 = riverTile(4, 0, false);
+
+const r2 = riverTile(3, 2, true);
+r2.position.x = -TILE_RADIUS * Math.sqrt(3);
+
+const r3 = riverTile(5, 1, true);
+r3.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
+r3.position.z = -1.5 * TILE_RADIUS;
+
+const r4 = riverTile(3, 1, false);
+r4.position.x = TILE_RADIUS * Math.sqrt(3)/2;
+r4.position.z = 1.5 * TILE_RADIUS;
+
+const m1 = mountainTile();
+m1.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
+m1.position.z = 1.5 * TILE_RADIUS;
+
+scene.add(r1);
+// scene.add(r2);
+// scene.add(r3);
+// scene.add(r4);
+// scene.add(m1);
 // scene.add(f2);
-// scene.add(f3);
+// scene.add(m3);
 // scene.add(f4);
 // scene.add(f5);
 // scene.add(f6);
-// scene.add(f7);
+// scene.add(m7);
 
 // Start
 animate();
