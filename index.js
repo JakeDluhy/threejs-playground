@@ -9,6 +9,7 @@ const { TILE_RADIUS } = require('./tiles/generic');
 const forestTile = require('./tiles/forest');
 const mountainTile = require('./tiles/mountain');
 const riverTile = require('./tiles/river');
+const plainsTile = require('./tiles/plains');
 
 require('./css/normalize.css');
 
@@ -88,7 +89,9 @@ const m1 = mountainTile();
 m1.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
 m1.position.z = 1.5 * TILE_RADIUS;
 
-scene.add(r1);
+const p1 = plainsTile();
+
+scene.add(p1);
 // scene.add(r2);
 // scene.add(r3);
 // scene.add(r4);
