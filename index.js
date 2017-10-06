@@ -11,6 +11,7 @@ const mountainTile = require('./tiles/mountain');
 const riverTile = require('./tiles/river');
 const plainsTile = require('./tiles/plains');
 const oceanTile = require('./tiles/ocean');
+const lakeTile = require('./tiles/lake');
 
 require('./css/normalize.css');
 
@@ -34,7 +35,7 @@ renderer.setSize(width, height);
 renderer.setClearColor(0x616161);
 
 // Set up controls and add the renderer to the dom
-const controls = new OrbitControls(camera, renderer.domElement, { maxPolarAngle: Math.PI / 2 });
+const controls = new OrbitControls(camera, renderer.domElement, { maxPolarAngle: Math.PI });
 
 document.body.appendChild(renderer.domElement);
 
@@ -94,7 +95,9 @@ const p1 = plainsTile();
 
 const o1 = oceanTile();
 
-scene.add(o1);
+const l1 = lakeTile(0);
+
+scene.add(l1);
 // scene.add(r2);
 // scene.add(r3);
 // scene.add(r4);
