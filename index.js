@@ -35,7 +35,7 @@ renderer.setSize(width, height);
 renderer.setClearColor(0x616161);
 
 // Set up controls and add the renderer to the dom
-const controls = new OrbitControls(camera, renderer.domElement, { maxPolarAngle: Math.PI });
+const controls = new OrbitControls(camera, renderer.domElement, { maxPolarAngle: Math.PI / 2 });
 
 document.body.appendChild(renderer.domElement);
 
@@ -43,71 +43,66 @@ document.body.appendChild(renderer.domElement);
 scene.add(buildAxes(50));
 setupLights(scene);
 
-const f1 = forestTile();
+const l1 = lakeTile(1);
 
-const f2 = forestTile();
-f2.position.x = TILE_RADIUS * Math.sqrt(3);
+const r1 = riverTile(4, 0, false);
+r1.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
+r1.position.z = -TILE_RADIUS * 1.5;
 
-const f3 = forestTile();
-f3.position.x = -TILE_RADIUS * Math.sqrt(3);
+const r2 = riverTile(3, 2, true);
+r2.position.x = -TILE_RADIUS * Math.sqrt(3)/2 * 3;
+r2.position.z = -TILE_RADIUS * 1.5;
 
-const f4 = forestTile();
-f4.position.x = TILE_RADIUS * Math.sqrt(3)/2;
-f4.position.z = 1.5 * TILE_RADIUS;
+const r3 = riverTile(5, 1, true);
+r3.position.x = -TILE_RADIUS * Math.sqrt(3)/2 * 2;
+r3.position.z = -TILE_RADIUS * 3;
 
-const f5 = forestTile();
-f5.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
-f5.position.z = 1.5 * TILE_RADIUS;
+const m1 = mountainTile();
+m1.position.x = TILE_RADIUS * Math.sqrt(3)/2;
+m1.position.z = TILE_RADIUS * 1.5;
 
-const f6 = forestTile();
-f6.position.x = TILE_RADIUS * Math.sqrt(3)/2;
-f6.position.z = -1.5 * TILE_RADIUS;
-
-const f7 = forestTile();
-f7.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
-f7.position.z = -1.5 * TILE_RADIUS;
+const m2 = mountainTile();
+m2.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
+m2.position.z = TILE_RADIUS * 1.5;
 
 const m3 = mountainTile();
 m3.position.x = -TILE_RADIUS * Math.sqrt(3);
 
-const m7 = mountainTile();
-m7.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
-m7.position.z = -1.5 * TILE_RADIUS;
-
-const r1 = riverTile(4, 0, false);
-
-const r2 = riverTile(3, 2, true);
-r2.position.x = -TILE_RADIUS * Math.sqrt(3);
-
-const r3 = riverTile(5, 1, true);
-r3.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
-r3.position.z = -1.5 * TILE_RADIUS;
-
-const r4 = riverTile(3, 1, false);
-r4.position.x = TILE_RADIUS * Math.sqrt(3)/2;
-r4.position.z = 1.5 * TILE_RADIUS;
-
-const m1 = mountainTile();
-m1.position.x = -TILE_RADIUS * Math.sqrt(3)/2;
-m1.position.z = 1.5 * TILE_RADIUS;
-
 const p1 = plainsTile();
+p1.position.z = -TILE_RADIUS * 3;
 
-const o1 = oceanTile();
+const p2 = plainsTile();
+p2.position.x = TILE_RADIUS * Math.sqrt(3)/2 * 2;
+p2.position.z = -TILE_RADIUS * 3;
 
-const l1 = lakeTile(0);
+const p3 = plainsTile();
+p3.position.x = TILE_RADIUS * Math.sqrt(3)/2;
+p3.position.z = -TILE_RADIUS * 1.5;
+
+const f1 = forestTile();
+f1.position.x = TILE_RADIUS * Math.sqrt(3);
+
+const f2 = forestTile();
+f2.position.x = TILE_RADIUS * Math.sqrt(3)/2 * 3;
+f2.position.z = -TILE_RADIUS * 1.5;
+
+const f3 = forestTile();
+f3.position.x = TILE_RADIUS * Math.sqrt(3)/2 * 3;
+f3.position.z = TILE_RADIUS * 1.5;
 
 scene.add(l1);
-// scene.add(r2);
-// scene.add(r3);
-// scene.add(r4);
-// scene.add(m1);
-// scene.add(f2);
-// scene.add(m3);
-// scene.add(f4);
-// scene.add(f5);
-// scene.add(f6);
-// scene.add(m7);
+scene.add(r1);
+scene.add(r2);
+scene.add(r3);
+scene.add(m1);
+scene.add(m2);
+scene.add(m3);
+scene.add(p1);
+scene.add(p2);
+scene.add(p3);
+scene.add(f1);
+scene.add(f2);
+scene.add(f3);
 
 // Start
 animate();
