@@ -5,11 +5,11 @@ const createGround = require('./create-ground');
 function createLakeTile(riverSide) {
   const group = createGenericTile();
 
-  const lakeMesh = createLake(riverSide);
-  group.add(lakeMesh);
-  // group.add(createGround(lakeMesh.geometry.vertices));
+  const { mesh, boundaryPolygon } = createLake(riverSide);
+  group.add(mesh);
+  group.add(createGround(boundaryPolygon));
 
-  // group.rotation.y = -sideStart * Math.PI/3;
+  group.rotation.y = -riverSide * Math.PI/3;
 
   return group;
 }

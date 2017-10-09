@@ -22,7 +22,13 @@ function createLake(riverSide) {
 
   waterGroup.add(createLakeMesh(riverTransitionVerts, boundaryPts));
 
-  return waterGroup;
+  const boundaryPolygon = [
+    [HALF_WIDTH / 2, -GROUND_RADIUS],
+    ...boundaryPts.map((v2) => [v2.x, v2.y]),
+    [-HALF_WIDTH / 2, -GROUND_RADIUS]
+  ];
+
+  return { mesh: waterGroup, boundaryPolygon };
 }
 
 module.exports = createLake;
@@ -81,66 +87,65 @@ function getBoundary(riverTransitionVerts) {
   const riverStartPt = riverTransitionCoords[0];
   const riverEndPt = riverTransitionCoords[riverTransitionCoords.length - 1];
 
-  let x = riverEndPt[0];
-  let y = riverEndPt[1];
-  let tan1 = new THREE.Vector3(0, 1, 0);
   let tan2 = new THREE.Vector3(1, 1, 0).normalize();
 
-  shape.moveTo(x, y);
+  const fifth = GROUND_RADIUS / 5;
+  const data = [];
+  const points = [
+    riverEndPt,
+    [fifth, -fifth * 2],
+    [fifth * 2, -fifth],
+    [fifth * 3, 0],
+    [fifth * 3, fifth * 1.25],
+    [fifth * 1.5, fifth * 3],
+    [0, fifth * 3],
+    [-fifth * 1.5, fifth * 3],
+    [-fifth * 3, fifth * 1.25],
+    [-fifth * 3, 0],
+    [-fifth * 3, -fifth * 1.5],
+    [-fifth * 1.25, -fifth * 2],
+    riverStartPt,
+  ];
 
-  shape.bezierCurveTo(
-    x, y + 2,
-    x + 1, y + 1,
-    x += 3, y += 3
-  );
+  shape.moveTo(...points[0]);
 
-  shape.bezierCurveTo(
-    x + 1, y + 1,
-    x + 4, y + 2,
-    x += 5, y += 5
-  );
+  let x = points[0][0];
+  let y = points[0][1];
+  let tan = new THREE.Vector2(0, 1);
 
-  shape.bezierCurveTo(
-    x + 1, y + 3,
-    x - 3, y + 6,
-    x -= 5, y += 4
-  );
+  for(let i = 1; i < points.length - 1; i++) {
+    const pt = points[i];
 
-  shape.bezierCurveTo(
-    x - 2, y - 2,
-    x - 1, y + 2,
-    x, y += 5
-  );
+    const cp1Rand = randomBetween(0.8, 2);
+    const cp1 = [
+      x + (tan.x * cp1Rand),
+      y + (tan.y * cp1Rand),
+    ];
 
-  shape.bezierCurveTo(
-    x + 1, y + 3,
-    x - 3, y + 1,
-    x -= 5, y += 2
-  );
+    const cp2 = [
+      x + (pt[0] - x) * randomBetween(0.4, 0.8),
+      y + (pt[1] - y) * randomBetween(0.4, 0.8),
+    ];
 
-  shape.bezierCurveTo(
-    x - 2, y + 1,
-    x - 6, y - 4,
-    x -= 6, y -= 6
-  );
+    x = pt[0] * randomBetween(0.9, 1.1);
+    y = pt[1] * randomBetween(0.9, 1.1);
+    tan.set(x - cp2[0], y - cp2[1]).normalize();
 
-  shape.bezierCurveTo(
-    x, y - 2,
-    x - 2, y - 4,
-    x -= 3, y -= 5
-  );
+    shape.bezierCurveTo(...cp1, ...cp2, x, y);
+  }
 
-  shape.bezierCurveTo(
-    x - 2, y - 2,
-    x + 1, y - 6,
-    x += 2, y -= 8
-  );
+  const cp1Rand = randomBetween(0.8, 2);
+  const cp1 = [
+    x + (tan.x * cp1Rand),
+    y + (tan.y * cp1Rand),
+  ];
 
-  shape.bezierCurveTo(
-    x + 1, y - 2,
-    riverStartPt[0], riverStartPt[1] + 2,
-    riverStartPt[0], riverStartPt[1]
-  );
+  const cp2 = [
+    riverStartPt[0],
+    riverStartPt[1] + randomBetween(0.8, 2),
+  ];
+
+  shape.bezierCurveTo(...cp1, ...cp2, ...riverStartPt);
 
   return shape.getPoints();
 }
@@ -158,7 +163,7 @@ function createLakeMesh(riverTransitionVerts, outerPoints) {
   .concat(riverTransitionVerts.slice(1, -1));
 
   // Take the last seven vertices and move them to the front
-  let verts = [...baseVerts.slice(-7), ..._.dropRight(baseVerts, 7)];
+  let verts = [...baseVerts.slice(-8), ..._.dropRight(baseVerts, 8)];
   let faces = [];
 
   // Because the transition from the river to the lake is confined and would require special
@@ -183,7 +188,7 @@ function createLakeMesh(riverTransitionVerts, outerPoints) {
   // Iterate through the first 10 points and create triangles connecting to the two
   // entry points. Points on the left connect to entryLeft. Points on the right connect
   // to entryRight
-  for(let i = 0; i < 10; i++) {
+  for(let i = 0; i < 12; i++) {
     const targetPt = verts[i].z < 0 ? entryLeft : entryRight;
 
     faces.push(new THREE.Face3(i, i + 1, targetPt));
@@ -195,9 +200,8 @@ function createLakeMesh(riverTransitionVerts, outerPoints) {
   // Outer indices start with the two entry points, and then wrap around counter clockwise
   // starting from the first point that did not go to an entry point. It end with the zero index as the
   // last point
-  const outerIndices = [entryLeft, entryRight]
-  .concat(_.range(10, verts.length - 2))
-  .concat([0]);
+  const outerIndices = [0, entryLeft, entryRight]
+  .concat(_.range(12, verts.length - 3));
 
   // Start by adding a layer from the outer indices. After that keep using the inner indices
   // from the previous layer to keep adding more and more
@@ -233,11 +237,17 @@ function createLakeMesh(riverTransitionVerts, outerPoints) {
   return new THREE.Mesh(geo, mat);
 }
 
-function getNormal(vertices, [prevIdx, nextIdx]) {
+/**
+ * The the normal vector of the z and x components from the two passed in vertices
+ * @param  {Vector3} prev The previous vector to use for the normal calculation
+ * @param  {Vector3} next The next vector to use for the normal calculation
+ * @return {Vector3}      The normalized normal vector
+ */
+function getNormal(prev, next) {
   return new THREE.Vector3(
-    vertices[nextIdx].z - vertices[prevIdx].z,
+    next.z - prev.z,
     0,
-    vertices[prevIdx].x - vertices[nextIdx].x
+    prev.x - next.x
   ).normalize();
 }
 
@@ -261,7 +271,7 @@ function addVertsLayer(outerIndices, verts, faces) {
 
     // Get the point, and the normal vector as calculated by the next and previous points, pointing inwards
     const pt = verts[idx];
-    const norm = getNormal(verts, [prevPtIdx, nextPtIdx]);
+    const norm = getNormal(verts[prevPtIdx], verts[nextPtIdx]);
 
     const newPt = new THREE.Vector3(
       pt.x + norm.x * LAYER_STEP_FACTOR,
@@ -293,6 +303,18 @@ function addVertsLayer(outerIndices, verts, faces) {
           closePtIdx
         )
       );
+
+      // Unless the closest point is not the last one, in which case push another triangle to connect
+      // the two inner points
+      if(innerIndices.length > 0 && closePtIdx !== innerIndices[innerIndices.length - 1]) {
+        faces.push(
+          new THREE.Face3(
+            closePtIdx,
+            innerIndices[innerIndices.length - 1],
+            prevPtIdx
+          )
+        );
+      }
 
       // Add the closest point to the innerIndices array
       innerIndices.push(closePtIdx);
