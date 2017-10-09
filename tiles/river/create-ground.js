@@ -38,11 +38,13 @@ function createGround(riverVerts) {
     // Get the height, based on how far from the hill the point is. Make sure it is always above 0
     const heightFromHill = Math.max(((5 - minHillDist) / 5) * HILL_HEIGHT, 0);
 
+    const height = RIVER_HEIGHT + heightFromHill + randomBetween(0, 0.25);
+
     // Make sure the edge doesn't peek over the tile edges
-    if(i === NUM_GROUND_RINGS) return Math.min(RIVER_HEIGHT + heightFromHill, TILE_HEIGHT);
+    if(i === NUM_GROUND_RINGS) return Math.min(height, TILE_HEIGHT);
 
     // Add the height of the river to the height based on the distance from the hill, plus a little variation
-    return RIVER_HEIGHT + heightFromHill + randomBetween(0, 0.25);
+    return height;
   };
 
   // Use createHexagonGeometry to create the ground
