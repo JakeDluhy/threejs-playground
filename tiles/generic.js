@@ -31,25 +31,26 @@ holePath.lineTo(GROUND_RADIUS / 2, -GROUND_RADIUS * sqrt3/2);
 
 edgeShape.holes = [holePath];
 
-// Create the generic group
-const group = new THREE.Group();
-
-// Create the base and add it to the group
-const baseGeo = new THREE.ExtrudeBufferGeometry(edgeShape, edgeExtrudeOpts);
-const baseMat = new THREE.MeshLambertMaterial({ color: 0xBDBDBD });
-const base = new THREE.Mesh(baseGeo, baseMat);
-group.add(base);
-
-base.rotation.z = Math.PI / 6;
-base.rotation.x = Math.PI / 2;
-base.position.y = TILE_HEIGHT;
-
 /**
  * Creates a group for a generic tile
  * @return {THREE.Group} A tile group
  */
 function createGenericTile() {
-  return new THREE.Group().copy(group);
+  // Create the generic group
+  const group = new THREE.Group();
+
+  // Create the base and add it to the group
+  const baseGeo = new THREE.ExtrudeBufferGeometry(edgeShape, edgeExtrudeOpts);
+  const baseMat = new THREE.MeshLambertMaterial({ color: 0xBDBDBD });
+
+  const base = new THREE.Mesh(baseGeo, baseMat);
+  group.add(base);
+
+  base.rotation.z = Math.PI / 6;
+  base.rotation.x = Math.PI / 2;
+  base.position.y = TILE_HEIGHT;
+
+  return group;
 }
 
 function randomPair(offset = 0) {

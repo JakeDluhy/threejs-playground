@@ -5,6 +5,7 @@ THREE.Cache.enabled = true;
 
 const setupLights = require('./helpers/setup-lights');
 const buildAxes = require('./helpers/build-axes');
+const Raycaster = require('./utils/raycaster');
 
 const { TILE_RADIUS } = require('./tiles/generic');
 const forestTile = require('./tiles/forest');
@@ -51,17 +52,27 @@ const map = require('./map');
 
 _.values(map.tiles).forEach((tileData) => {
   const tile = typeMap[tileData.type](tileData.params);
+
   tile.position.set(...axialToTHREE(tileData.coordinates));
+  tile.coordinates = tileData.coordinates;
+  tile.isTile = true;
+
   scene.add(tile);
 });
 /** End add scene from data */
 
+/** Add raycaster */
+const raycaster = new Raycaster();
+
 // Start
 animate();
 function animate() {
-  requestAnimationFrame(animate);
+  const tile = raycaster.findTile(scene, camera);
+
   controls.update();
   renderer.render(scene, camera);
+
+  window.requestAnimationFrame(animate);
 }
 
 window.addEventListener('resize', () => {
@@ -70,4 +81,3 @@ window.addEventListener('resize', () => {
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 }, false);
-

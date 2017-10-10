@@ -16,7 +16,7 @@ THREE.Cache.add(ROCK2_KEY, JSON.stringify(require('./rock2.json')));
 THREE.Cache.add(ROCK3_KEY, JSON.stringify(require('./rock3.json')));
 
 function rock({ zxScale }) {
-  const mesh = new THREE.Mesh();
+  const mesh = new THREE.Mesh(new THREE.Geometry());
 
   loader.load(sample(ROCK_KEYS), (geometry) => {
     const material = new THREE.MeshLambertMaterial({ color: sample(ROCK_COLORS), side: THREE.BackSide });
