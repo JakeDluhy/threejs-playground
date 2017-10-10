@@ -5,22 +5,28 @@ const { sample } = require('../../utils/array');
 
 const TRUNK_KEY = 'pine-tree/trunk';
 const LEAVES_KEY = 'pine-tree/leaves';
-const BASE_BOUNDING_RADIUS = 1.8;
-const LEAF_COLORS = [0x50BA81];
+const BASE_BOUNDING_RADIUS = 1.6;
+const LEAF_COLORS = [0x176620];
 
 THREE.Cache.add(TRUNK_KEY, JSON.stringify(require('./trunk.json')));
 THREE.Cache.add(LEAVES_KEY, JSON.stringify(require('./leaves.json')));
 
+const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8F4F1C });
+const leavesMaterial = new THREE.MeshLambertMaterial({ color: 0x176620 });
+
+const trunkPromise = new Promise((resolve, reject) => loader.load(TRUNK_KEY, resolve, null, reject));
+const leavesPromise = new Promise((resolve, reject) => loader.load(LEAVES_KEY, resolve, null, reject));
+
 function pineTree({ zxScale }) {
   const group = new THREE.Group();
 
-  loader.load(TRUNK_KEY, (geometry) => {
-    const material = new THREE.MeshLambertMaterial({ color: 0x8F4F1C });
-    group.add(new THREE.Mesh(geometry, material));
+  trunkPromise.then((geo) => {
+    const mat = new THREE.MeshLambertMaterial().copy(trunkMaterial);
+    group.add(new THREE.Mesh(geo, mat));
   });
-  loader.load(LEAVES_KEY, (geometry) => {
-    const material = new THREE.MeshLambertMaterial({ color: sample(LEAF_COLORS) });
-    group.add(new THREE.Mesh(geometry, material));
+  leavesPromise.then((geo) => {
+    const mat = new THREE.MeshLambertMaterial().copy(leavesMaterial);
+    group.add(new THREE.Mesh(geo, mat));
   });
 
   group.scale.z = zxScale;

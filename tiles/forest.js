@@ -7,7 +7,7 @@ const { createHexagonGeometry } = require('../utils/three');
 const { pineTree, getTreeBoundingRadius } = require('../models/pine-tree');
 const { rock, getRockBoundingRadius } = require('../models/rock');
 
-const GROUND_RINGS = 12;
+const GROUND_RINGS = 10;
 const CENTER_RADIUS = 2;
 const centerData = { z: 0, x: 0, radius: CENTER_RADIUS };
 
@@ -26,24 +26,11 @@ module.exports = createForestTile;
 function createGround() {
   const yFunc = ({ i, j }) => i === GROUND_RINGS ? 0 : Math.random() * 0.4;
   const faceFunc = (face) => {
-    const rand = Math.random();
-    let rgbVals;
-
-    if(rand < 0.9) {
-      rgbVals = [
-        85/255,
-        139/255 + randomBetween(-0.05, 0.05),
-        47/255,
-      ];
-    } else {
-      rgbVals = [
-        78/255 + randomBetween(-0.03, 0.03),
-        72/255 + randomBetween(-0.03, 0.03),
-        46/255 + randomBetween(-0.03, 0.03),
-      ];
-    }
-
-    face.color.setRGB(...rgbVals);
+    face.color.setRGB(
+      78/255 + randomBetween(-0.03, 0.03),
+      72/255 + randomBetween(-0.03, 0.03),
+      46/255 + randomBetween(-0.03, 0.03)
+    );
   };
 
   const groundGeo = createHexagonGeometry(GROUND_RINGS, GROUND_RADIUS, yFunc, faceFunc);
