@@ -4,7 +4,8 @@ const inside = require('point-in-polygon');
 const { GROUND_RADIUS, TILE_HEIGHT } = require('../generic');
 const { createHexagonGeometry } = require('../../utils/three');
 const { GROUND_COLOR, RIVER_HEIGHT } = require('../river/params');
-const { randomBetween, randomArrayElements, mag, sqrt3 } = require('../../utils/math');
+const { randomBetween, mag, sqrt3 } = require('../../utils/math');
+const { randomArrayElements } = require('../../utils/array');
 
 const {
   NUM_GROUND_RINGS,

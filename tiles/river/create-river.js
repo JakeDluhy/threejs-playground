@@ -149,7 +149,7 @@ function riverOverThree(mod) {
     new THREE.Vector3( -GROUND_RADIUS * sqrt3/3, 0, mod * (0                      + randomBetween(-1, 1))     ),
     new THREE.Vector3( -GROUND_RADIUS * sqrt3/4, 0, mod * ((GROUND_RADIUS * 0.15) + randomBetween(-2, 0))     ),
     new THREE.Vector3( -GROUND_RADIUS * sqrt3/8, 0, mod * ((GROUND_RADIUS * 0.20) + randomBetween(-1.5, 1.5)) ),
-    new THREE.Vector3( 0,                        0, mod * ((GROUND_RADIUS * 0.25) + randomBetween(-2, 2))     ),
+    new THREE.Vector3( 0,                        0, mod * ((GROUND_RADIUS * 0.25) + randomBetween(-1, 2))     ),
     new THREE.Vector3( GROUND_RADIUS *  sqrt3/8, 0, mod * ((GROUND_RADIUS * 0.20) + randomBetween(-1.5, 1.5)) ),
     new THREE.Vector3( GROUND_RADIUS *  sqrt3/4, 0, mod * ((GROUND_RADIUS * 0.15) + randomBetween(-1, 1))     ),
     new THREE.Vector3( GROUND_RADIUS *  sqrt3/3, 0, mod * (0                      + randomBetween(-2, 0))     ),
