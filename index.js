@@ -28,8 +28,8 @@ const FAR  = 10000;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-camera.position.x = -50;
-camera.position.y = 50;
+camera.position.x = -250;
+camera.position.y = 250;
 scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
