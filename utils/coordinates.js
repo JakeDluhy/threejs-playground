@@ -1,5 +1,5 @@
 const { TILE_RADIUS } = require('../params');
-const { sqrt3 } = require('./math');
+const { approximateEqual, sqrt3 } = require('./math');
 
 function getKey([q, r]) {
   return `(${q})-(${r})`;
@@ -54,9 +54,9 @@ function hexOuterPoints(radius) {
 }
 
 function sameCoordsTHREE([x1, y1, z1], [x2, y2, z2]) {
-  return Math.abs(x2 - x1) < 1e-3 &&
-         Math.abs(y2 - y1) < 1e-3 &&
-         Math.abs(z2 - z1) < 1e-3;
+  return approximateEqual(x2, x1) &&
+         approximateEqual(y2, y1) &&
+         approximateEqual(z2, z1);
 }
 
 exports.getKey = getKey;

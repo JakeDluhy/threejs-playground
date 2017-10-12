@@ -12,7 +12,12 @@ function mag(p1, p2) {
   );
 }
 
+function approximateEqual(a, b) {
+  return Math.abs(a - b) < 1e-3;
+}
+
 exports.randomBetween = randomBetween;
 exports.sumN = sumN;
 exports.mag = mag;
+exports.approximateEqual = approximateEqual;
 exports.sqrt3 = Math.sqrt(3);

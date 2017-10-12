@@ -34,7 +34,7 @@ scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(width, height);
-renderer.setClearColor(0x616161);
+renderer.setClearColor(0x000000);
 
 // Set up controls and add the renderer to the dom
 const controls = new OrbitControls(camera, renderer.domElement, { maxPolarAngle: Math.PI / 2.5 });
@@ -74,7 +74,7 @@ function animate() {
   const tile = raycaster.findTile(scene, camera);
 
   controls.update();
-  if(controls.object.position.y < 20) controls.object.position.y = 20;
+  if(controls.object.position.y < 25) controls.object.position.y = 25;
 
   renderer.render(scene, camera);
 
