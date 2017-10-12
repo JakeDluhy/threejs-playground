@@ -1,7 +1,9 @@
 const THREE = require('three');
 const _ = require('lodash');
 
-const { axialToTHREE } = require('./utils/coordinates');
+const { axialToTHREE, hexOuterPoints, sameCoordsTHREE, axialDistance } = require('./utils/coordinates');
+const { TILE_RADIUS } = require('./params');
+const { sqrt3 } = require('./utils/math');
 
 // pass in uniforms. 
 const vertexShader = `
@@ -13,15 +15,14 @@ const vertexShader = `
     float dx = (20.0 * cRel.x) / cRel.y;
     float dz = (20.0 * cRel.z) / cRel.y;
 
-    vec3 p = vec3(
-      position.x + dx,
-      position.y,
-      position.z + dz
-    );
-
     gl_Position = projectionMatrix *
                   modelViewMatrix *
-                  vec4(p, 1.0);
+                  vec4(
+                    position.x + dx,
+                    position.y,
+                    position.z + dz,
+                    1.0
+                  );
 
     if(color.x == 1.0 && color.y == 1.0 && color.z == 1.0) {
       vColor = vec4(0.0, 0.0, 0.0, 0.0);
@@ -35,7 +36,7 @@ const fragmentShader = `
   varying vec4 vColor;
 
   float expGradient(float val, float max) {
-    return max / pow(20.0, (max - val)) - (max / 20.0);
+    return max / pow(100.0, (max - val)) - (max / 100.0);
   }
 
   void main() {
@@ -50,36 +51,57 @@ const fragmentShader = `
 
 function createFogOfWar(tiles) {
   const tilesArray = _.values(tiles);
-  // const tileIndices = tilesArray.map(({ coordinates: coords }, index) => ({ coords, index }));
 
+  const vertsStructure = [];
   const verts = [];
-  const normals = [];
   const indices = [];
   const colors = [];
 
-  tilesArray.forEach(({ coordinates: coords }, idx) => {
-    // Push verts
-    verts.push(...axialToTHREE(coords));
-    normals.push(0, 1, 0);
 
-    // Push indices
-    let rightUp;
-    let rightDown;
-    let down;
+  for(let i = 0; i < tilesArray.length; i++) {
+    const coords = axialToTHREE(tilesArray[i].coordinates);
 
-    for(let i = 0; i < tilesArray.length; i++) {
-      const { coordinates: nextCoords } = tilesArray[i];
+    // Going to be some kind of coordinates lookup for passed in visible tiles
+    const visible = axialDistance(tilesArray[i].coordinates, [0,0]) < 2 ? true : false;
 
-      if((coords[0] + 1) === nextCoords[0] && (coords[1] - 1) === nextCoords[1]) rightUp = i;
-      else if((coords[0] + 1) === nextCoords[0] && coords[1] === nextCoords[1]) rightDown = i;
-      else if(coords[0] === nextCoords[0] && (coords[1] + 1) === nextCoords[1]) down = i;
+    vertsStructure.push({ coords, visible, outer: true });
+    const centerIndex = vertsStructure.length - 1;
+
+    const outerIndices = hexOuterPoints(TILE_RADIUS).map((pt) => {
+      const ptCoords = [coords[0] + pt[1], coords[1], coords[2] + pt[0]];
+
+      let duplicateIndex;
+
+      for(let j = vertsStructure.length - 1; j >= 0; j--) {
+        if(sameCoordsTHREE(ptCoords, vertsStructure[j].coords)) {
+          duplicateIndex = j;
+          vertsStructure[j].visible = vertsStructure[j].visible && visible;
+          vertsStructure[j].outer = false;
+          break;
+        }
+      }
+
+      if(_.isNumber(duplicateIndex)) {
+        return duplicateIndex;
+      } else {
+        vertsStructure.push({ coords: ptCoords, visible });
+        return vertsStructure.length - 1;
+      }
+    });
+
+    for(let j = 0; j < outerIndices.length; j++) {
+      indices.push(
+        centerIndex,
+        outerIndices[j],
+        outerIndices[(j + 1) % 6]
+      );
     }
+  }
 
-    if(_.isNumber(rightDown) && _.isNumber(rightUp)) indices.push(rightDown, rightUp, idx);
-    if(_.isNumber(down) && _.isNumber(rightDown)) indices.push(down, rightDown, idx);
+  vertsStructure.forEach(({ coords, visible }) => {
+    verts.push(...coords);
 
-    // Push colors
-    if(idx < 20) colors.push(1.0, 1.0, 1.0);
+    if(visible) colors.push(1.0, 1.0, 1.0);
     else colors.push(0.0, 0.0, 0.0);
   });
 
@@ -93,12 +115,10 @@ function createFogOfWar(tiles) {
     vertexShader,
     fragmentShader,
     vertexColors: THREE.VertexColors,
+    transparent:  true,
   });
-  console.log(geo);
-  mat.transparent = true;
 
   const mesh = new THREE.Mesh(geo, mat);
-
   mesh.position.y = 20;
 
   return mesh;

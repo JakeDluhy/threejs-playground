@@ -1,33 +1,33 @@
 const THREE = require('three');
 
-const { randomBetween } = require('../utils/math');
+const { randomBetween, sqrt3 } = require('../utils/math');
+const { hexOuterPoints } = require('../utils/coordinates');
 
-const TILE_RADIUS = 15;
-const GROUND_RADIUS = TILE_RADIUS * 0.98;
-const TILE_HEIGHT = 0.5;
-
-const sqrt3 = Math.sqrt(3);
+const { TILE_RADIUS, GROUND_RADIUS, TILE_HEIGHT } = require('../params');
 
 // Define the edge shape that will be used for all shape geometries
 const edgeShape = new THREE.Shape();
 const edgeExtrudeOpts = { amount: TILE_HEIGHT, bevelEnabled: false };
 
-edgeShape.moveTo(TILE_RADIUS, 0);
-edgeShape.lineTo(TILE_RADIUS / 2, TILE_RADIUS * sqrt3/2);
-edgeShape.lineTo(-TILE_RADIUS / 2, TILE_RADIUS * sqrt3/2);
-edgeShape.lineTo(-TILE_RADIUS, 0);
-edgeShape.lineTo(-TILE_RADIUS / 2, -TILE_RADIUS * sqrt3/2);
-edgeShape.lineTo(TILE_RADIUS / 2, -TILE_RADIUS * sqrt3/2);
+const outerPoints = hexOuterPoints(TILE_RADIUS);
+const innerPoints = hexOuterPoints(GROUND_RADIUS);
+
+edgeShape.moveTo(...outerPoints[0]);
+edgeShape.lineTo(...outerPoints[1]);
+edgeShape.lineTo(...outerPoints[2]);
+edgeShape.lineTo(...outerPoints[3]);
+edgeShape.lineTo(...outerPoints[4]);
+edgeShape.lineTo(...outerPoints[5]);
 
 // Define the hole in the shape
 const holePath = new THREE.Path();
 
-holePath.moveTo(GROUND_RADIUS, 0);
-holePath.lineTo(GROUND_RADIUS / 2, GROUND_RADIUS * sqrt3/2);
-holePath.lineTo(-GROUND_RADIUS / 2, GROUND_RADIUS * sqrt3/2);
-holePath.lineTo(-GROUND_RADIUS, 0);
-holePath.lineTo(-GROUND_RADIUS / 2, -GROUND_RADIUS * sqrt3/2);
-holePath.lineTo(GROUND_RADIUS / 2, -GROUND_RADIUS * sqrt3/2);
+holePath.moveTo(...innerPoints[0]);
+holePath.lineTo(...innerPoints[1]);
+holePath.lineTo(...innerPoints[2]);
+holePath.lineTo(...innerPoints[3]);
+holePath.lineTo(...innerPoints[4]);
+holePath.lineTo(...innerPoints[5]);
 
 edgeShape.holes = [holePath];
 

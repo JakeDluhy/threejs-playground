@@ -384,7 +384,8 @@ function addVertsLayer(outerIndices, verts, faces) {
     if(angle < 90 || angle > 270) {
       faces.push(new THREE.Face3(prevVertIdx, idx, nextVertIdx));
 
-      // Splice out the value from the array (which means that our i now targets the _next_) index.
+      // Splice out the value from the array (which means that our i now targets the _next_) index. We want
+      // it to target the _same_ index that it was before, to check acute angles again.
       // And because i++ is going to hit, we need to subtract two from the value, and make sure it never
       // gets below -1 (because i++ will bring that up to 0)
       innerIndices.splice(i, 1);

@@ -1,4 +1,4 @@
-const { TILE_RADIUS } = require('../tiles/generic');
+const { TILE_RADIUS } = require('../params');
 const { sqrt3 } = require('./math');
 
 function getKey([q, r]) {
@@ -42,8 +42,27 @@ function oppositeSide(sideIndex) {
   return sideIndex <= 2 ? sideIndex + 3 : sideIndex - 3;
 }
 
+function hexOuterPoints(radius) {
+  return [
+    [ radius,      0                      ],
+    [ radius / 2,  radius * sqrt3/2  ],
+    [ -radius / 2, radius * sqrt3/2  ],
+    [ -radius,     0                      ],
+    [ -radius / 2, -radius * sqrt3/2 ],
+    [ radius / 2,  -radius * sqrt3/2 ],
+  ];
+}
+
+function sameCoordsTHREE([x1, y1, z1], [x2, y2, z2]) {
+  return Math.abs(x2 - x1) < 1e-3 &&
+         Math.abs(y2 - y1) < 1e-3 &&
+         Math.abs(z2 - z1) < 1e-3;
+}
+
 exports.getKey = getKey;
 exports.axialToTHREE = axialToTHREE;
 exports.axialDistance = axialDistance;
 exports.getNeighbors = getNeighbors;
 exports.oppositeSide = oppositeSide;
+exports.hexOuterPoints = hexOuterPoints;
+exports.sameCoordsTHREE = sameCoordsTHREE;
