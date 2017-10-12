@@ -37,13 +37,14 @@ renderer.setSize(width, height);
 renderer.setClearColor(0x616161);
 
 // Set up controls and add the renderer to the dom
-const controls = new OrbitControls(camera, renderer.domElement, { maxPolarAngle: Math.PI / 2 });
+const controls = new OrbitControls(camera, renderer.domElement, { maxPolarAngle: Math.PI / 2.5 });
 
 document.body.appendChild(renderer.domElement);
 
 // Add objects to the scene
 scene.add(buildAxes(50));
 setupLights(scene);
+
 
 /** Add scene from data */
 const { typeMap } = require('./tiles');
@@ -61,6 +62,9 @@ _.values(map.tiles).forEach((tileData) => {
 });
 /** End add scene from data */
 
+scene.add(require('./fog-of-war')(map.tiles));
+
+
 /** Add raycaster */
 const raycaster = new Raycaster();
 
@@ -70,6 +74,8 @@ function animate() {
   const tile = raycaster.findTile(scene, camera);
 
   controls.update();
+  if(controls.object.position.y < 20) controls.object.position.y = 20;
+
   renderer.render(scene, camera);
 
   window.requestAnimationFrame(animate);
