@@ -37,7 +37,7 @@ function createWavyGround({ color, height, offset, number }) {
 
   // Use createHexagonGeometry to create the ground
   const groundGeo = createHexagonGeometry(NUM_GROUND_RINGS, GROUND_RADIUS, yFunc);
-  const groundMat = new THREE.MeshLambertMaterial({ shading: THREE.FlatShading, color });
+  const groundMat = new THREE.MeshLambertMaterial({ flatShading: THREE.FlatShading, color });
   const ground = new THREE.Mesh(groundGeo, groundMat);
 
   return ground;

@@ -34,7 +34,7 @@ function createRiver(sideStart, sideEnd, isClockwise) {
   geo.faces = faces;
   geo.computeFaceNormals();
 
-  const mat = new THREE.MeshLambertMaterial({ shading: THREE.FlatShading, color: RIVER_COLOR });
+  const mat = new THREE.MeshLambertMaterial({ flatShading: THREE.FlatShading, color: RIVER_COLOR });
 
   return new THREE.Mesh(geo, mat);
 }

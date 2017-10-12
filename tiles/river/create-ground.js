@@ -49,7 +49,7 @@ function createGround(riverVerts) {
 
   // Use createHexagonGeometry to create the ground
   const groundGeo = createHexagonGeometry(NUM_GROUND_RINGS, GROUND_RADIUS, yFunc);
-  const groundMat = new THREE.MeshLambertMaterial({ shading: THREE.FlatShading, color: GROUND_COLOR });
+  const groundMat = new THREE.MeshLambertMaterial({ flatShading: THREE.FlatShading, color: GROUND_COLOR });
   const ground = new THREE.Mesh(groundGeo, groundMat);
 
   return ground;

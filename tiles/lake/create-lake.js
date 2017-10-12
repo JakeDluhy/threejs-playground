@@ -75,7 +75,7 @@ function createRiverMesh() {
   }
 
   geo.computeFaceNormals();
-  const mat = new THREE.MeshLambertMaterial({ shading: THREE.FlatShading, color: RIVER_COLOR });
+  const mat = new THREE.MeshLambertMaterial({ flatShading: THREE.FlatShading, color: RIVER_COLOR });
 
   return new THREE.Mesh(geo, mat);
 }
@@ -233,7 +233,7 @@ function createLakeMesh(riverTransitionVerts, outerPoints) {
   geo.computeFaceNormals();
 
   // Create the material and mesh
-  const mat = new THREE.MeshLambertMaterial({ shading: THREE.FlatShading, color: RIVER_COLOR });
+  const mat = new THREE.MeshLambertMaterial({ flatShading: THREE.FlatShading, color: RIVER_COLOR });
   return new THREE.Mesh(geo, mat);
 }
 

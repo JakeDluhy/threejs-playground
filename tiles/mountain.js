@@ -51,7 +51,7 @@ function createGround() {
     groundGeo.vertices[upIdx1 + val].y = platformHeight;
   });
 
-  const groundMat = new THREE.MeshLambertMaterial({ shading: THREE.FlatShading, vertexColors: THREE.FaceColors });
+  const groundMat = new THREE.MeshLambertMaterial({ flatShading: THREE.FlatShading, vertexColors: THREE.FaceColors });
   const ground = new THREE.Mesh(groundGeo, groundMat);
 
   ground.position.y = 0.01;

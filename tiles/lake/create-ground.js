@@ -55,7 +55,7 @@ function createGround(boundaryPolygon) {
     return height;
   };
   const geo = createHexagonGeometry(NUM_GROUND_RINGS, GROUND_RADIUS, yFunc);
-  const mat = new THREE.MeshLambertMaterial({ shading: THREE.FlatShading, color: GROUND_COLOR });
+  const mat = new THREE.MeshLambertMaterial({ flatShading: THREE.FlatShading, color: GROUND_COLOR });
   const ground = new THREE.Mesh(geo, mat);
 
   return ground;
