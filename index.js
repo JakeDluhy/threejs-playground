@@ -5,7 +5,7 @@ THREE.Cache.enabled = true;
 
 const setupLights = require('./helpers/setup-lights');
 const buildAxes = require('./helpers/build-axes');
-const Raycaster = require('./utils/raycaster');
+const GameCursor = require('./utils/game-cursor');
 
 const { TILE_RADIUS } = require('./tiles/generic');
 const forestTile = require('./tiles/forest');
@@ -62,16 +62,15 @@ _.values(map.tiles).forEach((tileData) => {
 });
 /** End add scene from data */
 
-scene.add(require('./fog-of-war')(map.tiles));
-
+// scene.add(require('./fog-of-war')(map.tiles));
 
 /** Add raycaster */
-const raycaster = new Raycaster();
+const gameCursor = new GameCursor(scene, camera);
 
 // Start
 animate();
 function animate() {
-  const tile = raycaster.findTile(scene, camera);
+  gameCursor.update();
 
   controls.update();
   if(controls.object.position.y < 25) controls.object.position.y = 25;
